@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Web Services Parallel Test Suite" parallel="classes" thread-count="2">
+    <test name="Web Services Parallel Test">
+        <classes>
+            <class name="tests.RestAssuredTest"></class>
+            <class name="tests.RestTempleteTest"></class>
+        </classes>
+    </test>
+</suite>

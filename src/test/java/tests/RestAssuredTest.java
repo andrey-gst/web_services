@@ -8,16 +8,28 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 public class RestAssuredTest {
+
+    public static final String PATH = "/users";
+
     @BeforeTest
-    public void initTest() {
-        RestAssured.baseURI = "http://jsonplaceholder.typicode.com";
+    public void initTest() throws IOException {
+
+        Properties properties = new Properties();
+        FileInputStream input = new FileInputStream("src/test/resources/base.properties");
+        properties.load(input);
+
+        RestAssured.baseURI = properties.getProperty("base.URL");
     }
 
     @Test
     public void checkStatusCode() {
         Response response = RestAssured.when()
-                        .get("/users")
+                        .get(PATH)
                     .andReturn();
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -25,7 +37,7 @@ public class RestAssuredTest {
     @Test
     public void checkResponseHeader() {
         Response response = RestAssured.when()
-                        .get("/users")
+                        .get(PATH)
                 .andReturn();
         String rpContentTypeHeadere = response.getHeader("Content-type");
         Assert.assertEquals(rpContentTypeHeadere,"application/json; charset=utf-8");
@@ -35,7 +47,7 @@ public class RestAssuredTest {
     @Test
     public void checkResponseBody() {
         Response response = RestAssured.when()
-                        .get("/users")
+                        .get(PATH)
                     .andReturn();
         ResponseBody responseBody = response.getBody();
         User[] users = responseBody.as(User[].class);
